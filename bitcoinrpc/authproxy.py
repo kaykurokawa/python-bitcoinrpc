@@ -121,14 +121,23 @@ class AuthServiceProxy(object):
             name = "%s.%s" % (self.__service_name, name)
         return AuthServiceProxy(self.__service_url, name, self.__timeout, self.__conn)
 
-    def __call__(self, *args):
+    def __call__(self, *args, **kwargs):
         AuthServiceProxy.__id_count += 1
 
         log.debug("-%s-> %s %s"%(AuthServiceProxy.__id_count, self.__service_name,
                                  json.dumps(args, default=EncodeDecimal)))
+        if len(kwargs) > 0 and len(args) == 0:
+            params = kwargs
+        elif len(args) > 0 and len(kwargs) == 0:
+            params = args
+        elif len(args) == 0 and len(kwargs) == 0:
+            params = ()
+        else:
+            raise Exception("No support for both args and kwargs specification")
+
         postdata = json.dumps({'version': '1.1',
                                'method': self.__service_name,
-                               'params': args,
+                               'params': params,
                                'id': AuthServiceProxy.__id_count}, default=EncodeDecimal)
         self.__conn.request('POST', self.__url.path, postdata,
                             {'Host': self.__url.hostname,
