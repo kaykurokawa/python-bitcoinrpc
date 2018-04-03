@@ -1,4 +1,12 @@
 =================
+Kay Kurokawa's python-bitcoinrpc fork
+=================
+
+This fork of python-bitconrpc supports Monero and its use of JSON RPC
+where arguments are specified as dictionaries instead of positionally as it is done in bitcoin.
+
+
+=================
 python-bitcoinrpc
 =================
 
