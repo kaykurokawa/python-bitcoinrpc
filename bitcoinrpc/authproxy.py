@@ -152,8 +152,11 @@ class AuthServiceProxy(object):
         elif 'result' not in response:
             raise JSONRPCException({
                 'code': -343, 'message': 'missing JSON-RPC result'})
-        
+
         return response['result']
+
+    def close_(self):
+        self.__conn.close()
 
     def batch_(self, rpc_calls):
         """Batch RPC call.
